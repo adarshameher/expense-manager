@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -16,6 +17,8 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Expense {
@@ -55,6 +58,11 @@ public class Expense {
 	@NotNull
 	@UpdateTimestamp
 	private Date modifiedDate;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id_FK")
+	@JsonIgnore
+	private User user;
 	
 	public Expense() {
 		super();
@@ -113,12 +121,19 @@ public class Expense {
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 	@Override
 	public String toString() {
 		return "Expense [txnId=" + txnId + ", fromAccountId=" + fromAccountId + ", toAccountId=" + toAccountId
 				+ ", amount=" + amount + ", description=" + description + ", category=" + category + ", txnType="
-				+ txnType + "]";
+				+ txnType + ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate + ", user.userId=" + user.getUserId() + "]";
 	}
+	
 	
 	
 	

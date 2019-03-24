@@ -40,18 +40,15 @@ public class User {
 	@Column(length = 10, unique = true)
 	private long mobileNo;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_id_FK")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Account> accounts;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_id_FK")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Category> categories;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_id_FK")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Expense> expenses;
 	

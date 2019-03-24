@@ -5,7 +5,10 @@ logging:
 
    file: expense-manager.log  
    
-#server.port: 8090
+server:
+#   port: 8090
+   servlet:
+      context-path: /expense-manager
 
 spring:
    jpa:

@@ -26,19 +26,23 @@ public class UserCommandLineRunner implements CommandLineRunner{
 		User user = new User();
 		user.setName("Aditya");
 		user.setMobileNo(9988776655L);
+		
 		Account account = new Account();
 		account.setAccountId("112233");
 		account.setAccountName("SBI");
 		account.setBalance(0);
+		account.setUser(user);
 		user.getAccounts().add(account);
 		
 		List<Category> categories = user.getCategories();
 		
 		Category cat = new Category();
 		cat.setCategoryName("Education");
+		cat.setUser(user);
 		categories.add(cat);
 		cat = new Category();
 		cat.setCategoryName("Transport");
+		cat.setUser(user);
 		categories.add(cat);
 		
 		user.setCategories(categories);

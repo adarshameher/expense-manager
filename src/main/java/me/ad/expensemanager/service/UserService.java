@@ -29,6 +29,9 @@ public class UserService {
 	
 	public User addUser(User user) {
 		doValidate(user);
+		user.getAccounts().forEach(acc -> acc.setUser(user));
+		user.getCategories().forEach(cat -> cat.setUser(user));
+		user.getExpenses().forEach(exp -> exp.setUser(user));
 		return userRepository.save(user);
 	}
 	
@@ -55,6 +58,28 @@ public class UserService {
 	    		+ " : " + cv.getMessage()).collect(Collectors.joining(", ")));
 	    	throw new ConstraintViolationException("ConstraintViolationException", constraintViolations);
 	    }
+	}
+
+	public User updateUserNameAndMobileById(Long userId, User user) {
+		Optional<User> findById = userRepository.findById(userId);
+		if(findById.isPresent()) {
+			User findUser = findById.get();
+			findUser.setName(user.getName());
+			findUser.setMobileNo(user.getMobileNo());
+			return userRepository.save(findUser);
+		} else {
+			throw new EntityNotFoundException("User with id " + userId + " not found");
+		}
+	}
+
+	public void removeUser(Long userId) {
+		Optional<User> findById = userRepository.findById(userId);
+		if(findById.isPresent()) {
+			User findUser = findById.get();
+			userRepository.delete(findUser);
+		} else {
+			throw new EntityNotFoundException("User with id " + userId + " not found");
+		}
 	}
 
 }
