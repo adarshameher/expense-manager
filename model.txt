@@ -1,0 +1,83 @@
+User
+	- id
+	- name
+	- mobile
+	- accounts
+	- categories
+	- expenses
+
+Account
+	- slNo
+	- accId
+	- name
+	- balance
+	- userId
+	
+Expense
+	- id
+	- userId
+	- fromAccountId
+	- toAccountId
+	- amount
+	- description
+	- category
+	- txnType (creadit/debit)
+	
+Category
+	- id
+	- userId
+	- name
+	
+	
+SQL :
+=============================================================================
+drop table account if exists
+drop table category if exists
+drop table expense if exists
+drop table user if exists
+drop sequence if exists hibernate_sequence
+create sequence hibernate_sequence start with 1 increment by 1
+
+create table account (
+sl_no bigint not null, 
+account_id varchar(255) not null, 
+account_name varchar(30) not null, 
+balance double not null, 
+created_date timestamp not null, 
+modified_date timestamp not null, 
+user_id bigint, 
+primary key (sl_no));
+
+create table category (
+category_id bigint not null, 
+category_name varchar(20) not null, 
+created_date timestamp not null, 
+modified_date timestamp not null, 
+user_id bigint, 
+primary key (category_id));
+
+create table expense (
+txn_id varchar(255) not null, 
+amount double not null, 
+created_date timestamp not null, 
+description varchar(200), 
+from_account_id bigint not null, 
+modified_date timestamp not null, 
+to_account_id bigint, 
+txn_type integer, 
+category_fk bigint, 
+user_id bigint, 
+primary key (txn_id));
+
+create table user (
+user_id bigint not null, 
+created_date timestamp not null, 
+mobile_no bigint not null, 
+modified_date timestamp not null, 
+name varchar(30) not null, 
+primary key (user_id));
+
+alter table account add constraint FK7m8ru44m93ukyb61dfxw0apf6 foreign key (user_id_fk) references user
+alter table category add constraint FKpfk8djhv5natgshmxiav6xkpu foreign key (user_id_fk) references user
+alter table expense add constraint FK9mtrhcc6dx8ctvp3pkb1cfd6s foreign key (category_fk) references category
+alter table expense add constraint FK758h5dgdblrpwoaaycbmn29i0 foreign key (user_id_fk) references user
