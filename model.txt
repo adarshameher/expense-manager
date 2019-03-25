@@ -21,7 +21,7 @@ Expense
 	- amount
 	- description
 	- category
-	- txnType (creadit/debit)
+	- txnType (credit/debit)
 	
 Category
 	- id

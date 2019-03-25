@@ -28,7 +28,7 @@ public class UserCommandLineRunner implements CommandLineRunner{
 		user.setMobileNo(9988776655L);
 		
 		Account account = new Account();
-		account.setAccountId("112233");
+		account.setAccountNo("112233");
 		account.setAccountName("SBI");
 		account.setBalance(0);
 		account.setUser(user);

@@ -26,7 +26,7 @@ public class Account {
 	private long slNo;
 	
 	@NotNull
-	private String accountId;
+	private String accountNo;
 	
 	@NotNull
 	@Size(max = 30, message = "AccountName can't be of more than 30 characters")
@@ -56,11 +56,11 @@ public class Account {
 	public void setSlNo(long slNo) {
 		this.slNo = slNo;
 	}
-	public String getAccountId() {
-		return accountId;
+	public String getAccountNo() {
+		return accountNo;
 	}
-	public void setAccountId(String accountId) {
-		this.accountId = accountId;
+	public void setAccountNo(String accountNo) {
+		this.accountNo = accountNo;
 	}
 	public String getAccountName() {
 		return accountName;
@@ -94,7 +94,7 @@ public class Account {
 	}
 	@Override
 	public String toString() {
-		return "Account [slNo=" + slNo + ", accountId=" + accountId + ", accountName=" + accountName + ", balance="
+		return "Account [slNo=" + slNo + ", accountNo=" + accountNo + ", accountName=" + accountName + ", balance="
 				+ balance + ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate + ", user.userId=" + user.getUserId() + "]";
 	}
 	

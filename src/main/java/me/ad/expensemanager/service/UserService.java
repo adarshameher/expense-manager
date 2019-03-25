@@ -1,5 +1,6 @@
 package me.ad.expensemanager.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -27,6 +28,10 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
+	public List<User> getAllUsers() {
+		return userRepository.findAll();
+	}
+	
 	public User addUser(User user) {
 		doValidate(user);
 		user.getAccounts().forEach(acc -> acc.setUser(user));
@@ -41,6 +46,17 @@ public class UserService {
 			return findById.get();
 		}else if(!isSilent){
 			throw new EntityNotFoundException("User with id " + userId + " not found");
+		}else {
+			return null;
+		}
+	}
+	
+	public User getUserByMobileNo(Long mobileNo, boolean isSilent) {
+		User findByMobileNo = userRepository.findByMobileNo(mobileNo);
+		if(findByMobileNo != null) {
+			return findByMobileNo;
+		}else if(!isSilent){
+			throw new EntityNotFoundException("User with mobileNo " + mobileNo + " not found");
 		}else {
 			return null;
 		}

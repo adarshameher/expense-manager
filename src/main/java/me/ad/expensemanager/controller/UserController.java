@@ -1,9 +1,6 @@
 package me.ad.expensemanager.controller;
 
 import java.util.List;
-import java.util.Optional;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,26 +9,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import me.ad.expensemanager.model.Account;
 import me.ad.expensemanager.model.User;
-import me.ad.expensemanager.repo.UserRepository;
+import me.ad.expensemanager.service.AccountService;
 import me.ad.expensemanager.service.UserService;
 
 @RestController
 public class UserController {
 	
 	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
 	private UserService userService;
 	
-	@GetMapping(path = "/users")
+	@Autowired
+	private AccountService accountService;
+	
+	@GetMapping(path = "/users/all")
 	public @ResponseBody List<User> getAllUsers() {
-		return userRepository.findAll();
+		return userService.getAllUsers();
 	}
 	
 	@GetMapping(path = "/users/{userId}")
@@ -42,6 +40,16 @@ public class UserController {
 	@GetMapping(path = "/users/{userId}/silent")
 	public @ResponseBody User getUserByIdSilent(@PathVariable("userId") Long userId) {
 		return userService.getUserById(userId, true);
+	}
+	
+	@GetMapping(path = "/users")
+	public @ResponseBody User getUserByMobile(@RequestParam("mobileNo") Long mobileNo) {
+		return userService.getUserByMobileNo(mobileNo, false);
+	}
+	
+	@GetMapping(path = "/users/silent")
+	public @ResponseBody User getUserByMobileSilent(@RequestParam("mobileNo") Long mobileNo) {
+		return userService.getUserByMobileNo(mobileNo, true);
 	}
 	
 	@PostMapping(path = "/users")
@@ -57,5 +65,20 @@ public class UserController {
 	@DeleteMapping(path = "/users/{userId}")
 	public void removeUser(@PathVariable("userId") Long userId) {
 		userService.removeUser(userId);
+	}
+	
+	@GetMapping(path = "/users/{userId}/accounts")
+	public List<Account> getAllAccountsByUserId(@PathVariable("userId") Long userId) {
+		return accountService.getAllAccountsByUserId(userId);
+	}
+	
+	@GetMapping(path = "users/{userId}/accounts/{accNo}")
+	public Account getAccountDetails(@PathVariable("userId") Long userId, @PathVariable("accNo") String accNo) {
+		return accountService.getAccountDetails(accNo);
+	}
+	
+	@PostMapping(path = "users/{userId}/accounts")
+	public Account addAccountForUser(@PathVariable("userId") Long userId, @RequestBody Account account) {
+		return accountService.addAccountForUser(account, userId);
 	}
 }
