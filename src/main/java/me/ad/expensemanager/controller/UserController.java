@@ -63,22 +63,32 @@ public class UserController {
 	}
 	
 	@DeleteMapping(path = "/users/{userId}")
-	public void removeUser(@PathVariable("userId") Long userId) {
-		userService.removeUser(userId);
+	public void removeUserByUserId(@PathVariable("userId") Long userId) {
+		userService.removeUserByUserId(userId);
 	}
 	
 	@GetMapping(path = "/users/{userId}/accounts")
-	public List<Account> getAllAccountsByUserId(@PathVariable("userId") Long userId) {
+	public @ResponseBody List<Account> getAllAccountsByUserId(@PathVariable("userId") Long userId) {
 		return accountService.getAllAccountsByUserId(userId);
 	}
 	
 	@GetMapping(path = "users/{userId}/accounts/{accNo}")
-	public Account getAccountDetails(@PathVariable("userId") Long userId, @PathVariable("accNo") String accNo) {
+	public @ResponseBody Account getAccountDetails(@PathVariable("userId") Long userId, @PathVariable("accNo") String accNo) {
 		return accountService.getAccountDetails(accNo);
 	}
 	
 	@PostMapping(path = "users/{userId}/accounts")
-	public Account addAccountForUser(@PathVariable("userId") Long userId, @RequestBody Account account) {
+	public @ResponseBody Account addAccountForUser(@PathVariable("userId") Long userId, @RequestBody Account account) {
 		return accountService.addAccountForUser(account, userId);
+	}
+	
+	@PutMapping(path = "users/{userId}/accounts/{accId}")
+	public @ResponseBody Account updateAccountForUserByAccountId(@PathVariable("userId") Long userId, @PathVariable("accId") Long accId, @RequestBody Account account) {
+		return accountService.updateAccountForUserByAccountId(account, accId, userId);
+	}
+	
+	@DeleteMapping(path = "users/{userId}/accounts/{accId}")
+	public void removeAccountForUserByAccountId(@PathVariable("userId") Long userId, @PathVariable("accId") Long accId) {
+		accountService.removeAccountForUserByAccountId(accId, userId);
 	}
 }

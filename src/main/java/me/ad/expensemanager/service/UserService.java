@@ -32,14 +32,6 @@ public class UserService {
 		return userRepository.findAll();
 	}
 	
-	public User addUser(User user) {
-		doValidate(user);
-		user.getAccounts().forEach(acc -> acc.setUser(user));
-		user.getCategories().forEach(cat -> cat.setUser(user));
-		user.getExpenses().forEach(exp -> exp.setUser(user));
-		return userRepository.save(user);
-	}
-	
 	public User getUserById(Long userId, boolean isSilent) {
 		Optional<User> findById = userRepository.findById(userId);
 		if(findById.isPresent()) {
@@ -62,18 +54,12 @@ public class UserService {
 		}
 	}
 	
-	private void doValidate(User user) {
-		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-	    Validator validator = factory.getValidator();
-
-	    Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
-	    if (constraintViolations.size() > 0 ) {
-	    	log.error(
-	    		constraintViolations.stream()
-	    		.map(cv -> cv == null ? "null" : "Invalid " + cv.getPropertyPath() 
-	    		+ " : " + cv.getMessage()).collect(Collectors.joining(", ")));
-	    	throw new ConstraintViolationException("ConstraintViolationException", constraintViolations);
-	    }
+	public User addUser(User user) {
+		doValidate(user);
+		user.getAccounts().forEach(acc -> acc.setUser(user));
+		user.getCategories().forEach(cat -> cat.setUser(user));
+		user.getExpenses().forEach(exp -> exp.setUser(user));
+		return userRepository.save(user);
 	}
 
 	public User updateUserNameAndMobileById(Long userId, User user) {
@@ -88,7 +74,7 @@ public class UserService {
 		}
 	}
 
-	public void removeUser(Long userId) {
+	public void removeUserByUserId(Long userId) {
 		Optional<User> findById = userRepository.findById(userId);
 		if(findById.isPresent()) {
 			User findUser = findById.get();
@@ -96,6 +82,20 @@ public class UserService {
 		} else {
 			throw new EntityNotFoundException("User with id " + userId + " not found");
 		}
+	}
+	
+	private void doValidate(User user) {
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+	    Validator validator = factory.getValidator();
+
+	    Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
+	    if (constraintViolations.size() > 0 ) {
+	    	log.error(
+	    		constraintViolations.stream()
+	    		.map(cv -> cv == null ? "null" : "Invalid " + cv.getPropertyPath() 
+	    		+ " : " + cv.getMessage()).collect(Collectors.joining(", ")));
+	    	throw new ConstraintViolationException("ConstraintViolationException", constraintViolations);
+	    }
 	}
 
 }

@@ -73,6 +73,36 @@ public class AccountService {
 		}
 	}
 	
+	public Account updateAccountForUserByAccountId(Account account, Long accId, Long userId) {
+		doValidate(account);
+		Optional<User> findUserById = userRepository.findById(userId);
+		if(findUserById.isPresent()){
+			Optional<Account> findAccountById = accountRepository.findById(accId);
+			if(findAccountById.isPresent()){
+				Account acc = findAccountById.get();
+				// Update Account
+				if(account.getAccountName() != null && account.getAccountName().length() > 0) acc.setAccountName(account.getAccountName());
+				if(account.getAccountNo() != null && account.getAccountNo().length() > 0) acc.setAccountNo(account.getAccountNo());
+				acc.setBalance(account.getBalance());
+				//Persist the new Account
+				return accountRepository.save(account);
+			} else {
+				throw new IllegalArgumentException("Account with id: " + accId + " doesn't exist for the User");
+			}
+		} else {
+			throw new EntityNotFoundException("User with id " + userId + " not found");
+		}
+	}
+	
+	public void removeAccountForUserByAccountId(Long accId, Long userId) {
+		Account findBySlNoAndUserId = accountRepository.findBySlNoAndUser_UserId(accId, userId);
+		if(findBySlNoAndUserId == null) {
+			throw new IllegalArgumentException("Account with id: " + accId + " doesn't exist for the User id: " + userId);
+		} else {
+			accountRepository.delete(findBySlNoAndUserId);
+		}
+	}
+	
 	private void doValidate(Account account) {
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 	    Validator validator = factory.getValidator();

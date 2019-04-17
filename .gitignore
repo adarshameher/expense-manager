@@ -4,6 +4,7 @@ HELP.md
 
 /.mvn/
 *.log
+*.log.*.gz
 
 ### STS ###
 .apt_generated
