@@ -1,4 +1,4 @@
-package me.ad.expensemanager.model;
+package me.ad.expensemanager.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,7 +27,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long userId;
+	private long id;
 	
 	@NotNull
 	@Size(max = 30, message = "Name of User can't be more than 30 characters")
@@ -40,17 +40,17 @@ public class User {
 	@Column(length = 10, unique = true)
 	private long mobileNo;
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<Account> accounts;
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	//@Fetch(value = FetchMode.SUBSELECT)
+	private List<Account> accounts = new ArrayList<Account>();
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<Category> categories;
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	//@Fetch(value = FetchMode.SUBSELECT)
+	private List<Category> categories = new ArrayList<Category>();
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<Expense> expenses;
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	//@Fetch(value = FetchMode.SUBSELECT)
+	private List<Expense> expenses = new ArrayList<Expense>();
 	
 	@CreationTimestamp
 	private Date createdDate;
@@ -61,11 +61,11 @@ public class User {
 	public User() {
 		super();
 	}
-	public long getUserId() {
-		return userId;
+	public long getId() {
+		return id;
 	}
-	public void setUserId(long userId) {
-		this.userId = userId;
+	public void setId(long id) {
+		this.id = id;
 	}
 	public String getName() {
 		return name;
@@ -85,8 +85,11 @@ public class User {
 		}
 		return accounts;
 	}
-	public void setAccounts(List<Account> accounts) {
-		this.accounts = accounts;
+	public void addAccount(Account account) {
+		this.accounts.add(account);
+	}
+	public void removeAccount(Account account) {
+		this.accounts.remove(account);
 	}
 	public List<Category> getCategories() {
 		if(this.categories == null) {
@@ -94,8 +97,11 @@ public class User {
 		}
 		return categories;
 	}
-	public void setCategories(List<Category> categories) {
-		this.categories = categories;
+	public void addCategory(Category category) {
+		this.categories.add(category);
+	}
+	public void removeCategory(Category category) {
+		this.categories.remove(category);
 	}
 	public List<Expense> getExpenses() {
 		if(this.expenses == null) {
@@ -103,8 +109,11 @@ public class User {
 		}
 		return expenses;
 	}
-	public void setExpenses(List<Expense> expenses) {
-		this.expenses = expenses;
+	public void addExpense(Expense expense) {
+		this.expenses.add(expense);
+	}
+	public void removeExpense(Expense expense) {
+		this.expenses.remove(expense);
 	}
 	public Date getCreatedDate() {
 		return createdDate;
@@ -120,8 +129,8 @@ public class User {
 	}
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", name=" + name + ", mobileNo=" + mobileNo + ", accounts=" + accounts
-				+ ", categories=" + categories + ", expenses=" + expenses + ", createdDate=" + createdDate
+		return "User [id=" + id + ", name=" + name + ", mobileNo=" + mobileNo
+				+ ", createdDate=" + createdDate
 				+ ", modifiedDate=" + modifiedDate + "]";
 	}
 	

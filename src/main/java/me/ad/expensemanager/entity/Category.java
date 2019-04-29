@@ -1,6 +1,7 @@
-package me.ad.expensemanager.model;
+package me.ad.expensemanager.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -19,22 +22,16 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Account {
+public class Category {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long slNo;
+	private long id;
 	
 	@NotNull
-	private String accountNo;
-	
-	@NotNull
-	@Size(max = 30, message = "AccountName can't be of more than 30 characters")
-	@Column(length = 30)
-	private String accountName;
-	
-	@NotNull
-	private double balance;
+	@Size(max = 20, message = "CategoryName can't be of more than 20 characters")
+	@Column(length = 20)
+	private String name;
 	
 	@CreationTimestamp
 	private Date createdDate;
@@ -43,36 +40,32 @@ public class Account {
 	private Date modifiedDate;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id_FK")
+	//@JoinColumn(name = "user_id_FK")
 	@JsonIgnore
 	private User user;
 	
-	public Account() {
-		
+	@OneToMany(mappedBy = "category")
+	@JsonIgnore
+	private List<Expense> expenses;
+	
+	public Category() {
+
 	}
-	public long getSlNo() {
-		return slNo;
+	public Category(String categoryName) {
+		super();
+		this.name = categoryName;
 	}
-	public void setSlNo(long slNo) {
-		this.slNo = slNo;
+	public long getId() {
+		return id;
 	}
-	public String getAccountNo() {
-		return accountNo;
+	public void setId(long id) {
+		this.id = id;
 	}
-	public void setAccountNo(String accountNo) {
-		this.accountNo = accountNo;
+	public String getName() {
+		return name;
 	}
-	public String getAccountName() {
-		return accountName;
-	}
-	public void setAccountName(String accountName) {
-		this.accountName = accountName;
-	}
-	public double getBalance() {
-		return balance;
-	}
-	public void setBalance(double balance) {
-		this.balance = balance;
+	public void setName(String name) {
+		this.name = name;
 	}
 	public Date getCreatedDate() {
 		return createdDate;
@@ -92,10 +85,14 @@ public class Account {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	public List<Expense> getExpenses() {
+		return expenses;
+	}
 	@Override
 	public String toString() {
-		return "Account [slNo=" + slNo + ", accountNo=" + accountNo + ", accountName=" + accountName + ", balance="
-				+ balance + ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate + ", user.userId=" + user.getUserId() + "]";
+		return "Category [categoryId=" + id + ", categoryName=" + name + ", createdDate=" + createdDate
+				+ ", modifiedDate=" + modifiedDate + ", user.userId=" + user.getId()
+				+ "]";
 	}
 	
 	

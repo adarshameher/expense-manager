@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import me.ad.expensemanager.model.User;
+import me.ad.expensemanager.entity.User;
 import me.ad.expensemanager.repo.UserRepository;
 
 @Service

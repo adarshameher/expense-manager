@@ -1,10 +1,12 @@
-package me.ad.expensemanager.model;
+package me.ad.expensemanager.entity;
 
 import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -33,10 +35,11 @@ public class Expense {
 	private String txnId;
 	
 	@NotNull
-	private long fromAccountId;
+	@ManyToOne
+	private Account fromAccount;
 	
-	@Column(nullable = true)
-	private long toAccountId;
+	@ManyToOne
+	private Account toAccount;
 	
 	@NotNull
 	private double amount;
@@ -45,22 +48,22 @@ public class Expense {
 	@Column(length = 200)
 	private String description;
 	
-	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "category_FK", referencedColumnName = "category_id")
+	@ManyToOne(cascade=CascadeType.ALL)
+	//@JoinColumn(name = "category_FK", referencedColumnName = "category_id")
 	private Category category;
 	
+	@Enumerated(EnumType.STRING)
+	@NotNull
 	private TransactionType txnType;
 	
-	@NotNull
 	@CreationTimestamp
 	private Date createdDate;
 	
-	@NotNull
 	@UpdateTimestamp
 	private Date modifiedDate;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id_FK")
+	//@JoinColumn(name = "user_id_FK")
 	@JsonIgnore
 	private User user;
 	
@@ -73,17 +76,17 @@ public class Expense {
 	public void setTxnId(String txnId) {
 		this.txnId = txnId;
 	}
-	public long getFromAccountId() {
-		return fromAccountId;
+	public Account getFromAccount() {
+		return fromAccount;
 	}
-	public void setFromAccountId(long fromAccountId) {
-		this.fromAccountId = fromAccountId;
+	public void setFromAccount(Account fromAccount) {
+		this.fromAccount = fromAccount;
 	}
-	public long getToAccountId() {
-		return toAccountId;
+	public Account getToAccount() {
+		return toAccount;
 	}
-	public void setToAccountId(long toAccountId) {
-		this.toAccountId = toAccountId;
+	public void setToAccount(Account toAccount) {
+		this.toAccount = toAccount;
 	}
 	public double getAmount() {
 		return amount;
@@ -129,9 +132,10 @@ public class Expense {
 	}
 	@Override
 	public String toString() {
-		return "Expense [txnId=" + txnId + ", fromAccountId=" + fromAccountId + ", toAccountId=" + toAccountId
+		return "Expense [txnId=" + txnId + ", fromAccountId=" + fromAccount.getId() 
+				+ ", toAccountId=" + toAccount == null ? "" : toAccount.getId()
 				+ ", amount=" + amount + ", description=" + description + ", category=" + category + ", txnType="
-				+ txnType + ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate + ", user.userId=" + user.getUserId() + "]";
+				+ txnType + ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate + ", user.userId=" + user.getId() + "]";
 	}
 	
 	

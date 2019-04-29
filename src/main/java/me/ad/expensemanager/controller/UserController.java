@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import me.ad.expensemanager.model.Account;
-import me.ad.expensemanager.model.User;
+import me.ad.expensemanager.entity.Account;
+import me.ad.expensemanager.entity.Expense;
+import me.ad.expensemanager.entity.User;
 import me.ad.expensemanager.service.AccountService;
+import me.ad.expensemanager.service.ExpenseService;
 import me.ad.expensemanager.service.UserService;
 
 @RestController
@@ -26,6 +28,9 @@ public class UserController {
 	
 	@Autowired
 	private AccountService accountService;
+	
+	@Autowired
+	private ExpenseService expenseService;
 	
 	@GetMapping(path = "/users/all")
 	public @ResponseBody List<User> getAllUsers() {
@@ -90,5 +95,10 @@ public class UserController {
 	@DeleteMapping(path = "users/{userId}/accounts/{accId}")
 	public void removeAccountForUserByAccountId(@PathVariable("userId") Long userId, @PathVariable("accId") Long accId) {
 		accountService.removeAccountForUserByAccountId(accId, userId);
+	}
+	
+	@PostMapping(path = "users/{userId}/expenses")
+	public @ResponseBody Expense addExpenseForUser(@PathVariable("userId") Long userId, @RequestBody Expense expense) {
+		return expenseService.addExpenseForUser(userId, expense);
 	}
 }

@@ -1,4 +1,4 @@
-package me.ad.expensemanager.model;
+package me.ad.expensemanager.entity;
 
 public enum TransactionType {
 	

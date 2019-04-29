@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import me.ad.expensemanager.model.Account;
-import me.ad.expensemanager.model.User;
+import me.ad.expensemanager.entity.Account;
+import me.ad.expensemanager.entity.User;
 import me.ad.expensemanager.repo.AccountRepository;
 import me.ad.expensemanager.repo.UserRepository;
 
@@ -36,7 +36,7 @@ public class AccountService {
 	public List<Account> getAllAccountsByUserId(Long userId) {
 		Optional<User> findById = userRepository.findById(userId);
 		if(findById.isPresent()) {
-			List<Account> findByUserId = accountRepository.findByUser_UserId(userId);
+			List<Account> findByUserId = accountRepository.findByUser_Id(userId);
 			return findByUserId;
 		} else {
 			throw new EntityNotFoundException("User with id " + userId + " not found");
@@ -56,7 +56,7 @@ public class AccountService {
 		doValidate(account);
 		Optional<User> findUserById = userRepository.findById(userId);
 		if(findUserById.isPresent()){
-			List<Account> userAccountList = accountRepository.findByUser_UserId(userId);
+			List<Account> userAccountList = accountRepository.findByUser_Id(userId);
 			for(Account acc : userAccountList) {
 				if(acc.getAccountNo().equals(account.getAccountNo())){
 					throw new IllegalArgumentException("Account with accountNo: " + account.getAccountNo() + " is already exists for the User");
@@ -95,7 +95,7 @@ public class AccountService {
 	}
 	
 	public void removeAccountForUserByAccountId(Long accId, Long userId) {
-		Account findBySlNoAndUserId = accountRepository.findBySlNoAndUser_UserId(accId, userId);
+		Account findBySlNoAndUserId = accountRepository.findByIdAndUser_Id(accId, userId);
 		if(findBySlNoAndUserId == null) {
 			throw new IllegalArgumentException("Account with id: " + accId + " doesn't exist for the User id: " + userId);
 		} else {
